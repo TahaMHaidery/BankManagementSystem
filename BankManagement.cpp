@@ -12,10 +12,9 @@ struct Transaction
 {
     string date;
     int accountNo;
-    double amount;
+    int amount;
     string type;
 };
-
 
 class Account
 {
@@ -29,7 +28,7 @@ protected:
     string AccountType;
     string AccountStatus;
     string DOB;
-    double Balance;
+    int Balance;
 
 public:
     Account(string Name, string dob, string Type)
@@ -61,20 +60,20 @@ public:
         return AccountNo;
     }
 
-    void setAccountStatus(string &newStatus)
+    void setAccountStatus(string newStatus)
     {
         AccountStatus = newStatus;
         cout << "Account status changed to: " << AccountStatus << endl;
     }
 
-    friend Account operator+(Account &acc, int amount)
+    friend Account operator+(Account acc, int amount)
     {
         acc.Balance += amount;
         cout << "\nDeposited: " << amount << ". New balance: " << acc.Balance << endl;
         return acc;
     }
 
-    friend Account operator-(Account &acc, int amount)
+    friend Account operator-(Account acc, int amount)
     {
         if (acc.Balance < amount)
         {
@@ -101,7 +100,7 @@ public:
     SalaryAccount(string Name, string dob, int Salary, double Rate)
         : Account(Name, dob, "Salary"), MonthlySalary(Salary), InterestRate(Rate) {}
 
-    void DisplayData() override
+    void DisplayData()
     {
         Account::DisplayData();
         cout << setw(15) << MonthlySalary
@@ -119,7 +118,7 @@ public:
     CurrentAccount(string Name, string dob, int limit, int charge)
         : Account(Name, dob, "Current"), TransactionLimit(limit), MonthlyCharge(charge) {}
 
-    void DisplayData() override
+    void DisplayData()
     {
         Account::DisplayData();
         cout << setw(15) << TransactionLimit
@@ -138,7 +137,7 @@ public:
     SavingsAccount(string Name, string dob, int Balance, double Rate)
         : Account(Name, dob, "Savings"), MinimumBalance(Balance), InterestRate(Rate) {}
 
-    void DisplayData() override
+    void DisplayData()
     {
         Account::DisplayData();
         cout << setw(15) << MinimumBalance
@@ -157,7 +156,7 @@ AccountType *createAccount(Args... args)
 }
 
 template <typename AccountType>
-void displayAccounts(const list<Account *> &accounts)
+void displayAccounts(list<Account*> accounts)
 {
     bool found = false;
     for (Account *acc : accounts)
@@ -222,13 +221,11 @@ void printSavingsHeader()
     cout << string(135, '-') << endl;
 }
 
-int calculateAge(const string& dob)
+int calculateAge(string dob)
 {
-    // Extract the year from the DOB (assuming the format DD-MM-YYYY)
     int day, month, year;
     sscanf(dob.c_str(), "%d-%d-%d", &day, &month, &year);
 
-    // Get the current year, month, and day
     time_t now = time(0);
     tm* ltm = localtime(&now);
 
@@ -236,10 +233,8 @@ int calculateAge(const string& dob)
     int currentMonth = 1 + ltm->tm_mon;
     int currentDay = ltm->tm_mday;
 
-    // Calculate age
     int age = currentYear - year;
 
-    // Adjust if the current month/day hasn't yet reached the DOB month/day in this year
     if (currentMonth < month || (currentMonth == month && currentDay < day))
     {
         age--;
@@ -250,10 +245,9 @@ int calculateAge(const string& dob)
 
 void deleteAccount(list<Account*>& accounts, int accountNo)
 {
-    list<Account*>::iterator it = accounts.begin();
     bool accountFound = false;
 
-    while (it != accounts.end())
+    for (auto it = accounts.begin(); it != accounts.end();)
     {
         if ((*it)->getAccountNo() == accountNo)
         {
@@ -357,7 +351,7 @@ void changeAccountStatus(list<Account*>& accounts, int accountNo)
     }
 }
 
-void logTransaction(int accountNo, double amount, const string &type)
+void logTransaction(int accountNo, int amount, string type)
 {
     string fileName = to_string(accountNo) + "_statement.txt";
     ofstream outFile(fileName, ios::app);
@@ -393,7 +387,7 @@ void logTransaction(int accountNo, double amount, const string &type)
     }
 }
 
-void withdrawMoneyAccount(list<Account *> &accounts, int accountNo, double amount)
+void withdrawMoneyAccount(list<Account*>& accounts, int accountNo, int amount)
 {
     for (Account *acc : accounts)
     {
@@ -407,7 +401,7 @@ void withdrawMoneyAccount(list<Account *> &accounts, int accountNo, double amoun
     cout << "No account found with Account No: " << accountNo << endl;
 }
 
-void depositMoneyAccount(list<Account *> &accounts, int accountNo, double amount)
+void depositMoneyAccount(list<Account*>& accounts, int accountNo, int amount)
 {
     for (Account *acc : accounts)
     {
@@ -485,7 +479,6 @@ int main()
             cout << "1. Salary Account" << endl;
             cout << "2. Current Account" << endl;
             cout << "3. Savings Account" << endl;
-
             cout << "\nAccount Type: ";
             cin >> acctype;
 
@@ -673,7 +666,6 @@ int main()
         }
     }
 
-    // Clean up dynamic memory
     for (Account *acc : accounts)
     {
         delete acc;
