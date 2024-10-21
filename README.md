@@ -7,7 +7,7 @@ This project is a **Bank Management System** implemented in **C++**, demonstrati
 - Create and manage different types of accounts:
   - Savings Account
   - Salary Account
-  - Other custom account types
+  - Current Account
 - Display account details based on account type using **templates** and **dynamic casting**.
 - Simple, flexible architecture that allows easy extension to new account types.
 - Supports listing and filtering of accounts by specific types.
