@@ -419,7 +419,7 @@ void loadAccountsFromFile(list<Account *> &accounts)
                 int salary;
                 double rate;
                 ss >> salary;
-                ss.ignore(); // skip comma
+                ss.ignore();
                 ss >> rate;
 
                 accounts.push_back(new SalaryAccount(name, dob, salary, rate));
@@ -428,7 +428,7 @@ void loadAccountsFromFile(list<Account *> &accounts)
             {
                 int limit, charge;
                 ss >> limit;
-                ss.ignore(); // skip comma
+                ss.ignore();
                 ss >> charge;
 
                 accounts.push_back(new CurrentAccount(name, dob, limit, charge));
@@ -438,7 +438,7 @@ void loadAccountsFromFile(list<Account *> &accounts)
                 int minBalance;
                 double rate;
                 ss >> minBalance;
-                ss.ignore(); // skip comma
+                ss.ignore();
                 ss >> rate;
 
                 accounts.push_back(new SavingsAccount(name, dob, minBalance, rate));
@@ -772,7 +772,7 @@ int main()
 
         case 9:
             flag = 1;
-            saveAllAccounts(accounts); // Save all accounts before exiting
+            saveAllAccounts(accounts);
             break;
 
         default:
